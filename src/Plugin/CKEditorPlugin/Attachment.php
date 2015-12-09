@@ -71,8 +71,6 @@ class Attachment extends CKEditorPluginBase implements CKEditorPluginConfigurabl
    * @see editor_image_upload_settings_form()
    */
   public function settingsForm(array $form, FormStateInterface $form_state, Editor $editor) {
-#    $form_state->loadInclude('editor', 'admin.inc');
-#    $form['attachments'] = editor_image_upload_settings_form($editor);
     $form['#attached']['library'][] = 'ckeditor_attachment/admin';
 
     // Defaults.
