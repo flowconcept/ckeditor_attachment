@@ -1,0 +1,9 @@
+{
+  "name": "ol0lll/ckeditor_attachment",
+  "description": "CKEditor plugin for Drupal 8 enabling file upload and linking.",
+  "version": "master",
+  "type": "drupal-module",
+  "license": "GPL-2.0+",
+  "minimum-stability": "dev",
+  "require": { }
+}
