@@ -17,7 +17,7 @@
             title: editor.config.drupalImage_dialogTitle,
             dialogClass: 'editor-attachment-dialog'
           };
-          Drupal.ckeditor.openDialog(editor, Drupal.url('editor/dialog/image/' + editor.config.drupal.format), {}, {}, dialogSettings);
+          Drupal.ckeditor.openDialog(editor, Drupal.url('ckeditor_attachment/dialog/attachment/' + editor.config.drupal.format), {}, {}, dialogSettings);
           //Drupal.ckeditor.openDialog(editor, Drupal.url('editor/dialog/image/' + editor.config.drupal.format), data.existingValues, data.saveCallback, dialogSettings);
         }
       }));

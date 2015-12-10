@@ -1,0 +1,7 @@
+ckeditor_attachment.attachment_dialog:
+  path: '/ckeditor_attachment/dialog/attachment/{filter_format}'
+  defaults:
+    _form: '\Drupal\ckeditor_attachment\Form\EditorAttachmentDialog'
+    _title: 'Upload file'
+  requirements:
+    _entity_access: 'filter_format.use'
