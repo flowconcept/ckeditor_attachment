@@ -74,7 +74,7 @@ class Attachment extends CKEditorPluginBase implements CKEditorPluginConfigurabl
     $form['#attached']['library'][] = 'ckeditor_attachment/admin';
 
     // Defaults.
-    $config = array('attachment' => '');
+    $config = array();
     $settings = $editor->getSettings();
     if (isset($settings['plugins']['attachment'])) {
       $config = $settings['plugins']['attachment'];
@@ -85,7 +85,7 @@ class Attachment extends CKEditorPluginBase implements CKEditorPluginConfigurabl
       'scheme' => file_default_scheme(),
       'directory' => 'inline-attachments',
       'max_size' => '',
-      'max_dimensions' => array('width' => '', 'height' => ''),
+      'extensions' => 'pdf txt',
     );
 
     $form['status'] = array(
@@ -139,6 +139,14 @@ class Attachment extends CKEditorPluginBase implements CKEditorPluginConfigurabl
       '#maxlength' => 20,
       '#size' => 10,
       '#placeholder' => $default_max_size,
+      '#states' => $show_if_file_uploads_enabled,
+    );
+
+    $form['extensions'] = array(
+      '#type' => 'textfield',
+      '#default_value' => $config['extensions'],
+      '#title' => t('Allowed file extensions'),
+      '#description' => t("Separate extensions with a space or comma and do not include the leading dot."),
       '#states' => $show_if_file_uploads_enabled,
     );
 

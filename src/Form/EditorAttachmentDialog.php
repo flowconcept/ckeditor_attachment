@@ -53,7 +53,7 @@ class EditorAttachmentDialog extends FormBase {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'editor_image_dialog';
+    return 'editor_attachment_dialog';
   }
 
   /**
@@ -70,31 +70,29 @@ class EditorAttachmentDialog extends FormBase {
     // editor. If we don't cache it, this data will be lost.
     if (isset($form_state->getUserInput()['editor_object'])) {
       // By convention, the data that the text editor sends to any dialog is in
-      // the 'editor_object' key. And the image dialog for text editors expects
+      // the 'editor_object' key. And the attachment dialog for text editors expects
       // that data to be the attributes for an <img> element.
       $file_element = $form_state->getUserInput()['editor_object'];
-      $form_state->set('image_element', $file_element);
+      $form_state->set('file_element', $file_element);
       $form_state->setCached(TRUE);
     }
     else {
-      // Retrieve the image element's attributes from form state.
-      $file_element = $form_state->get('image_element') ?: [];
+      // Retrieve the attachment element's attributes from form state.
+      $file_element = $form_state->get('file_element') ?: [];
     }
 
     $form['#tree'] = TRUE;
     $form['#attached']['library'][] = 'editor/drupal.editor.dialog';
-    $form['#prefix'] = '<div id="editor-image-dialog-form">';
+    $form['#prefix'] = '<div id="editor-attachment-dialog-form">';
     $form['#suffix'] = '</div>';
 
     $editor = editor_load($filter_format->id());
 
     // Construct strings to use in the upload validators.
-    $config = $editor->getImageUploadSettings();
-    if (!empty($config['dimensions'])) {
-      $max_dimensions = $config['dimensions']['max_width'] . '×' . $config['dimensions']['max_height'];
-    }
-    else {
-      $max_dimensions = 0;
+    $config = array();
+    $settings = $editor->getSettings();
+    if (isset($settings['plugins']['attachment'])) {
+      $config = $settings['plugins']['attachment'];
     }
     $max_filesize = min(Bytes::toInt($config['max_size']), file_upload_max_size());
 
@@ -102,86 +100,34 @@ class EditorAttachmentDialog extends FormBase {
     $fid = $existing_file ? $existing_file->id() : NULL;
 
     $form['fid'] = array(
-      '#title' => $this->t('Attachment'),
+      '#title' => $this->t('File'),
       '#type' => 'managed_file',
       '#upload_location' => $config['scheme'] . '://' . $config['directory'],
       '#default_value' => $fid ? array($fid) : NULL,
       '#upload_validators' => array(
-        'file_validate_extensions' => array('gif png jpg jpeg'),
+        'file_validate_extensions' => array($config['extensions']),
         'file_validate_size' => array($max_filesize),
-        'file_validate_image_resolution' => array($max_dimensions),
       ),
       '#required' => TRUE,
     );
 
-    $form['attributes']['src'] = array(
+    $form['attributes']['href'] = array(
       '#title' => $this->t('URL'),
       '#type' => 'textfield',
-      '#default_value' => isset($file_element['src']) ? $file_element['src'] : '',
+      '#default_value' => isset($file_element['href']) ? $file_element['href'] : '',
       '#maxlength' => 2048,
       '#required' => TRUE,
     );
 
-    // If the editor has image uploads enabled, show a managed_file form item,
+    // If the editor has attachment uploads enabled, show a managed_file form item,
     // otherwise show a (file URL) text form item.
     if ($config['status']) {
-      $form['attributes']['src']['#access'] = FALSE;
-      $form['attributes']['src']['#required'] = FALSE;
+      $form['attributes']['href']['#access'] = FALSE;
+      $form['attributes']['href']['#required'] = FALSE;
     }
     else {
       $form['fid']['#access'] = FALSE;
       $form['fid']['#required'] = FALSE;
-    }
-
-    // The alt attribute is *required*, but we allow users to opt-in to empty
-    // alt attributes for the very rare edge cases where that is valid by
-    // specifying two double quotes as the alternative text in the dialog.
-    // However, that *is* stored as an empty alt attribute, so if we're editing
-    // an existing image (which means the src attribute is set) and its alt
-    // attribute is empty, then we show that as two double quotes in the dialog.
-    // @see https://www.drupal.org/node/2307647
-    $alt = isset($file_element['alt']) ? $file_element['alt'] : '';
-    if ($alt === '' && !empty($file_element['src'])) {
-      $alt = '""';
-    }
-    $form['attributes']['alt'] = array(
-      '#title' => $this->t('Alternative text'),
-      '#placeholder' => $this->t('Short description for the visually impaired'),
-      '#type' => 'textfield',
-      '#required' => TRUE,
-      '#required_error' => $this->t('Alternative text is required.<br />(Only in rare cases should this be left empty. To create empty alternative text, enter <code>""</code> — two double quotes without any content).'),
-      '#default_value' => $alt,
-      '#maxlength' => 2048,
-    );
-
-    // When Drupal core's filter_align is being used, the text editor may
-    // offer the ability to change the alignment.
-#    if (isset($file_element['data-align']) && $filter_format->filters('filter_align')->status) {
-      $form['align'] = array(
-        '#title' => $this->t('Align'),
-        '#type' => 'radios',
-        '#options' => array(
-          'none' => $this->t('None'),
-          'left' => $this->t('Left'),
-          'center' => $this->t('Center'),
-          'right' => $this->t('Right'),
-        ),
-        '#default_value' => $file_element['data-align'] === '' ? 'none' : $file_element['data-align'],
-        '#wrapper_attributes' => array('class' => array('container-inline')),
-        '#attributes' => array('class' => array('container-inline')),
-        '#parents' => array('attributes', 'data-align'),
-      );
- #   }
-
-    // When Drupal core's filter_caption is being used, the text editor may
-    // offer the ability to in-place edit the image's caption: show a toggle.
-    if (isset($file_element['hasCaption']) && $filter_format->filters('filter_caption')->status) {
-      $form['caption'] = array(
-        '#title' => $this->t('Caption'),
-        '#type' => 'checkbox',
-        '#default_value' => $file_element['hasCaption'] === 'true',
-        '#parents' => array('attributes', 'hasCaption'),
-      );
     }
 
     $form['actions'] = array(
@@ -213,18 +159,12 @@ class EditorAttachmentDialog extends FormBase {
     if (!empty($fid)) {
       $file = $this->fileStorage->load($fid);
       $file_url = file_create_url($file->getFileUri());
-      // Transform absolute image URLs to relative image URLs: prevent problems
+      // Transform absolute attachment URLs to relative URLs: prevent problems
       // on multisite set-ups and prevent mixed content errors.
       $file_url = file_url_transform_relative($file_url);
-      $form_state->setValue(array('attributes', 'src'), $file_url);
+      $form_state->setValue(array('attributes', 'href'), $file_url);
       $form_state->setValue(array('attributes', 'data-entity-uuid'), $file->uuid());
       $form_state->setValue(array('attributes', 'data-entity-type'), 'file');
-    }
-
-    // When the alt attribute is set to two double quotes, transform it to the
-    // empty string: two double quotes signify "empty alt attribute". See above.
-    if (trim($form_state->getValue(array('attributes', 'alt'))) === '""') {
-      $form_state->setValue(array('attributes', 'alt'), '');
     }
 
     if ($form_state->getErrors()) {
@@ -233,7 +173,7 @@ class EditorAttachmentDialog extends FormBase {
         '#type' => 'status_messages',
         '#weight' => -10,
       ];
-      $response->addCommand(new HtmlCommand('#editor-image-dialog-form', $form));
+      $response->addCommand(new HtmlCommand('#editor-attachment-dialog-form', $form));
     }
     else {
       $response->addCommand(new EditorDialogSave($form_state->getValues()));

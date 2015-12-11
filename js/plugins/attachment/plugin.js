@@ -6,7 +6,6 @@
   {
     init: function (editor)
     {
-      console.log('init');
       editor.addCommand('attachment', new CKEDITOR.dialogCommand('attachment', {
         allowedContent: 'a[!href,class,!data-entity-type,!data-entity-uuid]',
         requiredContent: 'a[href,class,data-entity-type,data-entity-uuid]',
