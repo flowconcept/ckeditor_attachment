@@ -91,8 +91,8 @@ class EditorAttachmentDialog extends FormBase {
     // Construct strings to use in the upload validators.
     $config = array();
     $settings = $editor->getSettings();
-    if (isset($settings['plugins']['attachment'])) {
-      $config = $settings['plugins']['attachment'];
+    if (isset($settings['plugins']['drupalattachment'])) {
+      $config = $settings['plugins']['drupalattachment'];
     }
     $max_filesize = min(Bytes::toInt($config['max_size']), file_upload_max_size());
 
@@ -100,6 +100,7 @@ class EditorAttachmentDialog extends FormBase {
     $fid = $existing_file ? $existing_file->id() : NULL;
 
     $form['fid'] = array(
+      '#field_name' => 'drupalattachment',
       '#title' => $this->t('File'),
       '#type' => 'managed_file',
       '#upload_location' => $config['scheme'] . '://' . $config['directory'],
@@ -165,6 +166,7 @@ class EditorAttachmentDialog extends FormBase {
       $form_state->setValue(array('attributes', 'href'), $file_url);
       $form_state->setValue(array('attributes', 'data-entity-uuid'), $file->uuid());
       $form_state->setValue(array('attributes', 'data-entity-type'), 'file');
+      $form_state->setValue(array('linktext'), $file->getFilename());
     }
 
     if ($form_state->getErrors()) {

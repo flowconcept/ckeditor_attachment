@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains \Drupal\ckeditor_attachment\Plugin\CKEditorPlugin\Attachment.
+ * Contains \Drupal\ckeditor_attachment\Plugin\CKEditorPlugin\DrupalAttachment.
  */
 
 namespace Drupal\ckeditor_attachment\Plugin\CKEditorPlugin;
@@ -15,21 +15,21 @@ use Drupal\editor\Entity\Editor;
 
 
 /**
- * Defines the "drupalimage" plugin.
+ * Defines the "drupalattachment" plugin.
  *
  * @CKEditorPlugin(
- *   id = "attachment",
- *   label = @Translation("Attachment"),
- *   module = "ckeditor"
+ *   id = "drupalattachment",
+ *   label = @Translation("Attachment")
  * )
+ *
  */
-class Attachment extends CKEditorPluginBase implements CKEditorPluginConfigurableInterface {
+class DrupalAttachment extends CKEditorPluginBase implements CKEditorPluginConfigurableInterface {
 
   /**
    * {@inheritdoc}
    */
   public function getFile() {
-    return drupal_get_path('module', 'ckeditor_attachment') . '/js/plugins/attachment/plugin.js';
+    return drupal_get_path('module', 'ckeditor_attachment') . '/js/plugins/drupalattachment/plugin.js';
   }
 
   /**
@@ -57,9 +57,9 @@ class Attachment extends CKEditorPluginBase implements CKEditorPluginConfigurabl
    */
   public function getButtons() {
     return array(
-      'Attachment' => array(
+      'DrupalAttachment' => array(
         'label' => t('Attachment'),
-        'image' => drupal_get_path('module', 'ckeditor_attachment') . '/js/plugins/attachment/image.png',
+        'image' => drupal_get_path('module', 'ckeditor_attachment') . '/js/plugins/drupalattachment/image.png',
       ),
     );
   }
@@ -76,8 +76,8 @@ class Attachment extends CKEditorPluginBase implements CKEditorPluginConfigurabl
     // Defaults.
     $config = array();
     $settings = $editor->getSettings();
-    if (isset($settings['plugins']['attachment'])) {
-      $config = $settings['plugins']['attachment'];
+    if (isset($settings['plugins']['drupalattachment'])) {
+      $config = $settings['plugins']['drupalattachment'];
     }
 
     $config += array(
