@@ -1,4 +1,4 @@
-name: CKEditor Youtube plugin
+name: CKEditor Attachment plugin
 type: module
 description: This plugin allows file uploading and linking.
 core: 8.x
