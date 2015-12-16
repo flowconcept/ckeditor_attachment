@@ -17,8 +17,8 @@
    */
   Drupal.behaviors.ckeditorAttachmentSettingsSummary = {
     attach: function () {
-      $('[data-ckeditor-plugin-id="attachment"]').drupalSetSummary(function (context) {
-        var root = 'input[name="editor[settings][plugins][attachment]';
+      $('[data-ckeditor-plugin-id="drupalattachment"]').drupalSetSummary(function (context) {
+        var root = 'input[name="editor[settings][plugins][drupalattachment]';
         var $status = $(root + '[status]"]');
         var $maxFileSize = $(root + '[max_size]"]');
         var $scheme = $(root + '[scheme]"]:checked');
