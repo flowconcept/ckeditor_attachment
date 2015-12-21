@@ -112,6 +112,14 @@ class EditorAttachmentDialog extends FormBase {
       '#required' => TRUE,
     );
 
+    $form['linktext'] = array(
+      '#title' => $this->t('Link text'),
+      '#type' => 'textfield',
+      '#default_value' => isset($file_element['linktext']) ? $file_element['linktext'] : '',
+      '#maxlength' => 2048,
+      '#required' => TRUE,
+    );
+
     $form['attributes']['href'] = array(
       '#title' => $this->t('URL'),
       '#type' => 'textfield',
@@ -166,7 +174,7 @@ class EditorAttachmentDialog extends FormBase {
       $form_state->setValue(array('attributes', 'href'), $file_url);
       $form_state->setValue(array('attributes', 'data-entity-uuid'), $file->uuid());
       $form_state->setValue(array('attributes', 'data-entity-type'), 'file');
-      $form_state->setValue(array('linktext'), $file->getFilename());
+      # $form_state->setValue(array('linktext'), $file->getFilename());
     }
 
     if ($form_state->getErrors()) {
