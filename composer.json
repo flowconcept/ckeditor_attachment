@@ -1,9 +1,19 @@
 {
   "name": "flowconcept/ckeditor_attachment",
   "description": "CKEditor plugin for Drupal 8 enabling file upload and linking.",
-  "version": "master",
   "type": "drupal-module",
+  "keywords": [
+    "drupal"
+  ],
+  "homepage": "https://github.com/flowconcept/ckeditor_attachment",
   "license": "GPL-2.0+",
+  "support": {
+    "issues": "https://github.com/flowconcept/ckeditor_attachment/issues"
+  }
   "minimum-stability": "dev",
-  "require": { }
+  "extra": {
+    "branch-alias": {
+      "dev-8.x-1.x": "8.1.x-dev"
+    }
+  }
 }
