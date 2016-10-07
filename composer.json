@@ -9,7 +9,7 @@
   "license": "GPL-2.0+",
   "support": {
     "issues": "https://github.com/flowconcept/ckeditor_attachment/issues"
-  }
+  },
   "minimum-stability": "dev",
   "extra": {
     "branch-alias": {
