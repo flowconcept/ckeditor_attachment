@@ -59,7 +59,7 @@ class DrupalAttachment extends CKEditorPluginBase implements CKEditorPluginConfi
     return array(
       'DrupalAttachment' => array(
         'label' => t('Attachment'),
-        'image' => drupal_get_path('module', 'ckeditor_attachment') . '/js/plugins/drupalattachment/image.png',
+        'image' => drupal_get_path('module', 'ckeditor_attachment') . '/js/plugins/drupalattachment/icons/attachment.png',
       ),
     );
   }
