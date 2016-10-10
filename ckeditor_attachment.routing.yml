@@ -5,3 +5,5 @@ ckeditor_attachment.attachment_dialog:
     _title: 'Upload file'
   requirements:
     _entity_access: 'filter_format.use'
+  options:
+    _theme: ajax_base_page
