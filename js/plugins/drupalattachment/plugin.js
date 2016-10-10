@@ -33,7 +33,7 @@
         label: 'Attachment',
         toolbar: '',
         command: 'drupalattachment',
-        icon: this.path + 'image.png'
+        icon: this.path + 'icons/attachment.png'
       });
 
     }
