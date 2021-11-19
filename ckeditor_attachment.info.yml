@@ -2,6 +2,7 @@ name: CKEditor Attachment plugin
 type: module
 description: This plugin allows file uploading and linking.
 core: 8.x
+core_version_requirement: ^8 || ^9
 package: CKEditor
 version: VERSION
 dependencies:
