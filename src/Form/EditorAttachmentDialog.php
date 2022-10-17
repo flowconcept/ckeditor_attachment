@@ -167,10 +167,12 @@ class EditorAttachmentDialog extends FormBase {
     $fid = $form_state->getValue(array('fid', 0));
     if (!empty($fid)) {
       $file = $this->fileStorage->load($fid);
-      $file_url = file_create_url($file->getFileUri());
+      $file_url = \Drupal::service('file_url_generator')
+          ->generateAbsoluteString($file->getFileUri());
       // Transform absolute attachment URLs to relative URLs: prevent problems
       // on multisite set-ups and prevent mixed content errors.
-      $file_url = file_url_transform_relative($file_url);
+      $file_url = \Drupal::service('file_url_generator')
+          ->transformRelative($file_url);
       $form_state->setValue(array('attributes', 'href'), $file_url);
       $form_state->setValue(array('attributes', 'data-entity-uuid'), $file->uuid());
       $form_state->setValue(array('attributes', 'data-entity-type'), 'file');

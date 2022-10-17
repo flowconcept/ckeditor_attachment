@@ -82,7 +82,7 @@ class DrupalAttachment extends CKEditorPluginBase implements CKEditorPluginConfi
 
     $config += array(
       'status' => FALSE,
-      'scheme' => file_default_scheme(),
+      'scheme' => \Drupal::config('system.file')->get('default_scheme'),
       'directory' => 'inline-attachments',
       'max_size' => '',
       'extensions' => 'pdf txt',
