@@ -7,8 +7,10 @@
 
 namespace Drupal\ckeditor_attachment\Plugin\CKEditorPlugin;
 
+use Drupal;
 use Drupal\ckeditor\CKEditorPluginBase;
 use Drupal\ckeditor\CKEditorPluginConfigurableInterface;
+use Drupal\Component\Utility\Environment;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StreamWrapper\StreamWrapperInterface;
 use Drupal\editor\Entity\Editor;
@@ -82,7 +84,7 @@ class DrupalAttachment extends CKEditorPluginBase implements CKEditorPluginConfi
 
     $config += array(
       'status' => FALSE,
-      'scheme' => file_default_scheme(),
+      'scheme' => Drupal::config('system.file')->get('default_scheme'),
       'directory' => 'inline-attachments',
       'max_size' => '',
       'extensions' => 'pdf txt',
@@ -118,7 +120,7 @@ class DrupalAttachment extends CKEditorPluginBase implements CKEditorPluginConfi
     // Set data- attributes with human-readable names for all possible stream
     // wrappers, so that ckeditor_attachment.admin's summary rendering
     // can use that.
-    foreach (\Drupal::service('stream_wrapper_manager')->getNames(StreamWrapperInterface::WRITE_VISIBLE) as $scheme => $name) {
+    foreach (Drupal::service('stream_wrapper_manager')->getNames(StreamWrapperInterface::WRITE_VISIBLE) as $scheme => $name) {
       $form['scheme'][$scheme]['#attributes']['data-label'] = t('Storage: @name', array('@name' => $name));
     }
 
@@ -130,7 +132,7 @@ class DrupalAttachment extends CKEditorPluginBase implements CKEditorPluginConfi
       '#states' => $show_if_file_uploads_enabled,
     );
 
-    $default_max_size = format_size(file_upload_max_size());
+    $default_max_size = format_size(Environment::getUploadMaxSize());
     $form['max_size'] = array(
       '#type' => 'textfield',
       '#default_value' => $config['max_size'],
