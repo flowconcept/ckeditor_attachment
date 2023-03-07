@@ -10,6 +10,7 @@ namespace Drupal\ckeditor_attachment\Plugin\CKEditorPlugin;
 use Drupal\ckeditor\CKEditorPluginBase;
 use Drupal\ckeditor\CKEditorPluginConfigurableInterface;
 use Drupal\Component\Utility\Environment;
+use Drupal\Core\Extension\ExtensionPathResolver;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StreamWrapper\StreamWrapperInterface;
 use Drupal\editor\Entity\Editor;
@@ -30,7 +31,7 @@ class DrupalAttachment extends CKEditorPluginBase implements CKEditorPluginConfi
    * {@inheritdoc}
    */
   public function getFile() {
-    return drupal_get_path('module', 'ckeditor_attachment') . '/js/plugins/drupalattachment/plugin.js';
+    return ExtensionPathResolver::getPath('module', 'ckeditor_attachment') . '/js/plugins/drupalattachment/plugin.js';
   }
 
   /**
@@ -60,7 +61,7 @@ class DrupalAttachment extends CKEditorPluginBase implements CKEditorPluginConfi
     return array(
       'DrupalAttachment' => array(
         'label' => t('Attachment'),
-        'image' => drupal_get_path('module', 'ckeditor_attachment') . '/js/plugins/drupalattachment/icons/attachment.png',
+        'image' => ExtensionPathResolver::getPath('module', 'ckeditor_attachment') . '/js/plugins/drupalattachment/icons/attachment.png',
       ),
     );
   }

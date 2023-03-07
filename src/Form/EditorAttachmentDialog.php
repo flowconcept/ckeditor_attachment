@@ -8,6 +8,7 @@
 namespace Drupal\ckeditor_attachment\Form;
 
 use Drupal\Component\Utility\Bytes;
+use Drupal\Component\Utility\Environment;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\filter\Entity\FilterFormat;
@@ -94,9 +95,9 @@ class EditorAttachmentDialog extends FormBase {
     if (isset($settings['plugins']['drupalattachment'])) {
       $config = $settings['plugins']['drupalattachment'];
     }
-    $max_filesize = min(Bytes::toInt($config['max_size']), file_upload_max_size());
+    $max_filesize = min(Bytes::toNumber($config['max_size']), Environment::getUploadMaxSize());
 
-    $existing_file = isset($file_element['data-entity-uuid']) ? \Drupal::entityManager()->loadEntityByUuid('file', $file_element['data-entity-uuid']) : NULL;
+    $existing_file = isset($file_element['data-entity-uuid']) ? \Drupal::entityTypeManager()->loadEntityByUuid('file', $file_element['data-entity-uuid']) : NULL;
     $fid = $existing_file ? $existing_file->id() : NULL;
 
     $form['fid'] = array(
