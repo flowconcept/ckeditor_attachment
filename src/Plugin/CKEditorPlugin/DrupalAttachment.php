@@ -9,6 +9,7 @@ namespace Drupal\ckeditor_attachment\Plugin\CKEditorPlugin;
 
 use Drupal\ckeditor\CKEditorPluginBase;
 use Drupal\ckeditor\CKEditorPluginConfigurableInterface;
+use Drupal\Component\Utility\Environment;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StreamWrapper\StreamWrapperInterface;
 use Drupal\editor\Entity\Editor;
@@ -130,7 +131,7 @@ class DrupalAttachment extends CKEditorPluginBase implements CKEditorPluginConfi
       '#states' => $show_if_file_uploads_enabled,
     );
 
-    $default_max_size = format_size(file_upload_max_size());
+    $default_max_size = format_size(Environment::getUploadMaxSize());
     $form['max_size'] = array(
       '#type' => 'textfield',
       '#default_value' => $config['max_size'],
