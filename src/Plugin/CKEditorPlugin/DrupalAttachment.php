@@ -31,7 +31,7 @@ class DrupalAttachment extends CKEditorPluginBase implements CKEditorPluginConfi
    * {@inheritdoc}
    */
   public function getFile() {
-    return ExtensionPathResolver::getPath('module', 'ckeditor_attachment') . '/js/plugins/drupalattachment/plugin.js';
+    return \Drupal::service('extension.list.module')->getPath('ckeditor_attachment') . '/js/plugins/drupalattachment/plugin.js';
   }
 
   /**
@@ -61,7 +61,7 @@ class DrupalAttachment extends CKEditorPluginBase implements CKEditorPluginConfi
     return array(
       'DrupalAttachment' => array(
         'label' => t('Attachment'),
-        'image' => ExtensionPathResolver::getPath('module', 'ckeditor_attachment') . '/js/plugins/drupalattachment/icons/attachment.png',
+        'image' => \Drupal::service('extension.list.module')->getPath('ckeditor_attachment') . '/js/plugins/drupalattachment/icons/attachment.png',
       ),
     );
   }
